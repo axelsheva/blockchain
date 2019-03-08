@@ -1,0 +1,18 @@
+version: "2"
+services:
+
+  blockchain_zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: blockchain_zookeeper
+    expose:
+    - "2181"
+
+  blockchain_kafka:
+    image: wurstmeister/kafka
+    container_name: blockchain_kafka
+    depends_on:
+    - blockchain_zookeeper
+    env_file:
+      - .env
+    ports:
+    - "9092:9092"
