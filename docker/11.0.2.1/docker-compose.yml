@@ -1,0 +1,20 @@
+version: "2"
+services:
+
+  blockchain:
+    image: blockchain-testnet
+    container_name: testnet-2
+    volumes:
+      - ../../:/go/src/bitbucket.org/axelsheva/blockchain
+    networks:
+      blockchain-testnet:
+        ipv4_address: 11.0.2.1
+    env_file:
+      - .env
+    restart: always
+    command: bee run
+
+networks:
+  blockchain-testnet:
+    external:
+      name: blockchain-testnet

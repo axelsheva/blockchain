@@ -1,0 +1,25 @@
+version: "2"
+services:
+
+  blockchain:
+    build:
+      context: ../..
+      dockerfile: dev.Dockerfile
+    image: blockchain-testnet
+    container_name: testnet-1
+    volumes:
+      - ../../:/go/src/bitbucket.org/axelsheva/blockchain
+    networks:
+      blockchain-testnet:
+        ipv4_address: 11.0.1.1
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    restart: always
+    command: bee run
+
+networks:
+  blockchain-testnet:
+    external:
+      name: blockchain-testnet
