@@ -15,19 +15,19 @@ func init() {
 }
 
 type IAccountsRepository interface {
-	AddOne(account models.Account) *models.Account
-	RemoveByPublicKey(publicKey models.PublicKey)
+	Add(account *models.Account) *models.Account
+	Get(publicKey models.PublicKey) *models.Account
 }
 
 type AccountsRepository struct {
 	byPublicKey map[models.PublicKey]*models.Account
 }
 
-func (dr *AccountsRepository) AddOne(account models.Account) *models.Account {
-	dr.byPublicKey[account.PublicKey] = &account
-	return &account
+func (repository *AccountsRepository) Add(account *models.Account) *models.Account {
+	repository.byPublicKey[account.PublicKey] = account
+	return account
 }
 
-func (dr *AccountsRepository) RemoveByPublicKey(publicKey models.PublicKey) {
-	delete(dr.byPublicKey, publicKey)
+func (repository *AccountsRepository) Get(publicKey models.PublicKey) *models.Account {
+	return repository.byPublicKey[publicKey]
 }

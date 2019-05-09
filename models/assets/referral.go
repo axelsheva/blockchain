@@ -1,10 +1,9 @@
-package transactions
+package assets
 
 import (
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
 type Referral struct {
-	models.Transaction
-	referral models.PublicKey
+	Referral models.PublicKey `json:"referral"`
 }

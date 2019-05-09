@@ -1,7 +1,15 @@
 package models
 
+type MessageType uint8
+
+const (
+	MessageWithBlock MessageType = iota
+	MessageWithTransaction
+)
+
 type Message struct {
 	ID   string
+	Type MessageType
 	Body interface{}
 }
 
