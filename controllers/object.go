@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"bitbucket.org/axelsheva/blockchain/models"
 	"encoding/json"
 
+	"bitbucket.org/axelsheva/blockchain/models"
 	"github.com/astaxie/beego"
 )
 

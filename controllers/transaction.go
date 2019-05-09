@@ -5,7 +5,6 @@ import (
 
 	"bitbucket.org/axelsheva/blockchain/models"
 	"bitbucket.org/axelsheva/blockchain/repositories"
-
 	"github.com/astaxie/beego"
 )
 

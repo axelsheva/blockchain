@@ -12,7 +12,7 @@ services:
     env_file:
       - .env
     restart: always
-    command: bee run
+    command: bash -c "go get ./... && bee run"
 
 networks:
   blockchain-testnet:
