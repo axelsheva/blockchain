@@ -12,7 +12,7 @@ func TestSendCalculateFee(t *testing.T) {
 	}
 
 	got := send.CalculateFee()
-	want := uint64(10000)
+	want := int64(10000)
 
 	if got != want {
 		t.Errorf("Send fee calculation is incorrect. Actual %d, Expected %d", got, want)

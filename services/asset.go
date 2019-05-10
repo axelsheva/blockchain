@@ -2,5 +2,5 @@ package services
 
 type IAsset interface {
 	ITransaction
-	CalculateFee() uint64
+	CalculateFee() int64
 }

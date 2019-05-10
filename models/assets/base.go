@@ -2,10 +2,10 @@ package assets
 
 type Base struct{}
 
-func (*Base) GetAmount() uint64 {
+func (*Base) GetAmount() int64 {
 	return 0
 }
 
-func (*Base) CalculateFee() uint64 {
+func (*Base) CalculateFee() int64 {
 	return 0
 }

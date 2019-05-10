@@ -1,16 +1,22 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 )
 
 type TransactionType uint8
 
 const (
-	Referral TransactionType = iota
-	Send
+	ReferralType  TransactionType = 0
+	SendType                      = 10
+	SignatureType                 = 20
+	DelegateType                  = 30
 )
+
+const SALT_LENGTH = 32
 
 type IVerifier interface {
 	VerifyUnconfirmed(sender *Account) error
@@ -24,9 +30,15 @@ type IApplier interface {
 type IAsset interface {
 	IVerifier
 	IApplier
-	GetAmount() uint64
-	CalculateFee() uint64
+	GetAmount() int64
+	CalculateFee() int64
 }
+
+// func (asset IAsset) UnmarshalJSON(data []byte) error {
+// 	println("[asset][UnmarshalJSON]")
+
+// 	return nil
+// }
 
 type ITransaction interface {
 	IVerifier
@@ -35,25 +47,15 @@ type ITransaction interface {
 
 type Transaction struct {
 	ID              string          `json:"id"`
-	BlockID         string          `json:"block_id"`
+	BlockID         string          `json:"blockId"`
 	Type            TransactionType `json:"type"`
-	SenderPublicKey PublicKey       `json:"sender_public_key"`
-	Fee             uint64          `json:"fee"`
+	SenderPublicKey PublicKey       `json:"senderPublicKey"`
+	Fee             int64          `json:"fee"`
 	Signature       string          `json:"signature"`
-	SecondSignature string          `json:"second_signature"`
-	CreatedAt       time.Time       `json:"created_at"`
+	SecondSignature string          `json:"secondSignature"`
+	CreatedAt       time.Time       `json:"createdAt"`
 	Salt            string          `json:"salt"`
 	Asset           IAsset          `json:"asset"`
-}
-
-func CreateTransaction(data Transaction) *Transaction {
-	transaction := Transaction{
-		Fee:       data.Asset.CalculateFee(),
-		Asset:     data.Asset,
-		CreatedAt: time.Now(),
-	}
-
-	return &transaction
 }
 
 func (transaction *Transaction) VerifyUnconfirmed(sender *Account) error {
@@ -74,4 +76,20 @@ func (transaction *Transaction) UndoUnconfirmed(sender *Account) {
 	sender.Balance += transaction.Fee
 
 	transaction.Asset.UndoUnconfirmed(sender)
+}
+
+func (transaction *Transaction) UnmarshalJSON(data []byte) error {
+	json.Unmarshal(data, *transaction)
+
+	// var s string
+	// err := json.Unmarshal(data, s)
+	// if err != nil {
+	// 	return err
+	// }
+	fmt.Printf("s: %+v\n\n", transaction)
+
+	// utils.UnmarshalAsset(data)
+
+	// return json.Unmarshal(data, transaction.Asset)
+	return nil
 }

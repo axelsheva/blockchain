@@ -29,5 +29,13 @@ func (repository *AccountsRepository) Add(account *models.Account) *models.Accou
 }
 
 func (repository *AccountsRepository) Get(publicKey models.PublicKey) *models.Account {
-	return repository.byPublicKey[publicKey]
+	account := repository.byPublicKey[publicKey]
+
+	if account == nil {
+		account = &models.Account{
+			PublicKey: publicKey,
+		}
+	}
+
+	return account
 }

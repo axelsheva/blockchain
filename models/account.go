@@ -5,9 +5,9 @@ type PublicKey string
 type Account struct {
 	PublicKey       PublicKey
 	SecondPublicKey PublicKey
-	Balance         uint64
+	Balance         int64
 	Delegate        *Delegate   // fix
 	Votes           []PublicKey //
-	Referrals       []PublicKey //
+	Referral        *Account    //
 	Stakes          string      //
 }

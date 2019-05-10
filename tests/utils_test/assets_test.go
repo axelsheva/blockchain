@@ -10,12 +10,12 @@ import (
 
 func TestSendAssetUnmarshal(t *testing.T) {
 	bytes := []byte(`{"recipientPublicKey":"1","amount":2}`)
-	asset, err := utils.UnmarshalAsset(bytes, models.Send)
+	asset, err := utils.UnmarshalAsset(bytes, models.SendType)
 	if err != nil {
 		t.Error(err)
 	}
 
-	expectedAmount := uint64(2)
+	expectedAmount := int64(2)
 	if asset.GetAmount() != expectedAmount {
 		t.Errorf("Transaction amount is invalid. Expected: %d, actual: %d", expectedAmount, asset.GetAmount())
 	}
