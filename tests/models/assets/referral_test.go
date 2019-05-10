@@ -6,8 +6,8 @@ import (
 	"bitbucket.org/axelsheva/blockchain/models/assets"
 )
 
-func TestBaseCalculateFee(t *testing.T) {
-	asset := assets.Base{}
+func TestReferralCalculateFee(t *testing.T) {
+	asset := assets.Referral{}
 
 	got := asset.CalculateFee()
 	want := uint64(0)
@@ -17,8 +17,8 @@ func TestBaseCalculateFee(t *testing.T) {
 	}
 }
 
-func TestBaseGetAmount(t *testing.T) {
-	asset := assets.Base{}
+func TestReferralGetAmount(t *testing.T) {
+	asset := assets.Referral{}
 
 	got := asset.GetAmount()
 	want := uint64(0)

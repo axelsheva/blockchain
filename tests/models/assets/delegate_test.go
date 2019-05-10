@@ -6,19 +6,19 @@ import (
 	"bitbucket.org/axelsheva/blockchain/models/assets"
 )
 
-func TestBaseCalculateFee(t *testing.T) {
-	asset := assets.Base{}
+func TestDelegateCalculateFee(t *testing.T) {
+	asset := assets.Delegate{}
 
 	got := asset.CalculateFee()
-	want := uint64(0)
+	want := uint64(1000000000)
 
 	if got != want {
 		t.Errorf("Fee calculation is incorrect. Actual %d, Expected %d", got, want)
 	}
 }
 
-func TestBaseGetAmount(t *testing.T) {
-	asset := assets.Base{}
+func TestDelegateGetAmount(t *testing.T) {
+	asset := assets.Delegate{}
 
 	got := asset.GetAmount()
 	want := uint64(0)
