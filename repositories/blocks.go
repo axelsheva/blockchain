@@ -18,6 +18,7 @@ type IBlocksRepository interface {
 	IsExists(ID string) bool
 	Push(block *models.Block) *models.Block
 	Pop() *models.Block
+	GetLast() *models.Block
 }
 
 type BlocksRepository struct {
@@ -47,4 +48,11 @@ func (r *BlocksRepository) IsExists(ID string) bool {
 	_, ok := r.indexes[ID]
 
 	return ok
+}
+
+func (r *BlocksRepository) GetLast() *models.Block {
+	if len(r.blocks) > 0 {
+		return r.blocks[len(r.blocks)-1]
+	}
+	return nil
 }

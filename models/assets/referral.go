@@ -5,5 +5,6 @@ import (
 )
 
 type Referral struct {
+	Base
 	Referral models.PublicKey `json:"referral"`
 }

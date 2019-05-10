@@ -1,4 +1,4 @@
-package models
+package models_test
 
 import (
 	"testing"
@@ -21,7 +21,7 @@ func TestSendApplyUnconfirmed(t *testing.T) {
 
 	transaction := models.Transaction{
 		Fee: 1,
-		Asset: assets.Send{
+		Asset: &assets.Send{
 			RecipientPublicKey: "2",
 			Amount:             1,
 		},
@@ -43,5 +43,23 @@ func TestSendApplyUnconfirmed(t *testing.T) {
 	}
 	if recipient.Balance != expectedRecipient.Balance {
 		t.Errorf("Invalid recipient balance. Actual %d, Expected %d", recipient.Balance, expectedRecipient.Balance)
+	}
+}
+
+func TestCreateSendTransaction(t *testing.T) {
+	transaction := models.CreateTransaction(models.Transaction{
+		Asset: &assets.Send{
+			Amount:             100000000,
+			RecipientPublicKey: "2",
+		},
+	})
+
+	expectedFee := uint64(10000)
+	if transaction.Fee != expectedFee {
+		t.Errorf("Transaction fee is invalid. Expected: %d, actual: %d", expectedFee, transaction.Fee)
+	}
+
+	if transaction.Salt == "" {
+		t.Errorf("Transaction salt is missing")
 	}
 }

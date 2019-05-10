@@ -46,6 +46,16 @@ type Transaction struct {
 	Asset           IAsset          `json:"asset"`
 }
 
+func CreateTransaction(data Transaction) *Transaction {
+	transaction := Transaction{
+		Fee:       data.Asset.CalculateFee(),
+		Asset:     data.Asset,
+		CreatedAt: time.Now(),
+	}
+
+	return &transaction
+}
+
 func (transaction *Transaction) VerifyUnconfirmed(sender *Account) error {
 	amount := transaction.Fee + transaction.Asset.GetAmount()
 	if sender.Balance < amount {
