@@ -10,24 +10,32 @@ var (
 
 func init() {
 	Delegates = &DelegatesRepository{
-		byPublicKey: make(map[models.PublicKey]*models.Account),
+		store: make(map[models.PublicKey]*models.Account),
 	}
 }
 
 type IDelegatesRepository interface {
-	AddOne(account models.Account) *models.Account
-	RemoveByPublicKey(publicKey models.PublicKey)
+	Add(account *models.Account)
+	Remove(publicKey models.PublicKey)
+	GetAll() []*models.Account
 }
 
 type DelegatesRepository struct {
-	byPublicKey map[models.PublicKey]*models.Account
+	store map[models.PublicKey]*models.Account
 }
 
-func (dr *DelegatesRepository) AddOne(account models.Account) *models.Account {
-	dr.byPublicKey[account.PublicKey] = &account
-	return &account
+func (r *DelegatesRepository) Add(account *models.Account) {
+	r.store[account.PublicKey] = account
 }
 
-func (dr *DelegatesRepository) RemoveByPublicKey(publicKey models.PublicKey) {
-	delete(dr.byPublicKey, publicKey)
+func (r *DelegatesRepository) Remove(publicKey models.PublicKey) {
+	delete(r.store, publicKey)
+}
+
+func (r *DelegatesRepository) GetAll() []*models.Account {
+	v := make([]*models.Account, 0, len(r.store))
+	for _, value := range r.store {
+		v = append(v, value)
+	}
+	return v
 }

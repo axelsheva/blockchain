@@ -10,26 +10,26 @@ var (
 
 func init() {
 	Accounts = &AccountsRepository{
-		byPublicKey: make(map[models.PublicKey]*models.Account),
+		store: make(map[models.PublicKey]*models.Account),
 	}
 }
 
 type IAccountsRepository interface {
-	Add(account *models.Account) *models.Account
+	Add(account *models.Account)
 	Get(publicKey models.PublicKey) *models.Account
+	Remove(publicKey models.PublicKey)
 }
 
 type AccountsRepository struct {
-	byPublicKey map[models.PublicKey]*models.Account
+	store map[models.PublicKey]*models.Account
 }
 
-func (repository *AccountsRepository) Add(account *models.Account) *models.Account {
-	repository.byPublicKey[account.PublicKey] = account
-	return account
+func (r *AccountsRepository) Add(account *models.Account) {
+	r.store[account.PublicKey] = account
 }
 
-func (repository *AccountsRepository) Get(publicKey models.PublicKey) *models.Account {
-	account := repository.byPublicKey[publicKey]
+func (r *AccountsRepository) Get(publicKey models.PublicKey) *models.Account {
+	account := r.store[publicKey]
 
 	if account == nil {
 		account = &models.Account{
@@ -38,4 +38,8 @@ func (repository *AccountsRepository) Get(publicKey models.PublicKey) *models.Ac
 	}
 
 	return account
+}
+
+func (r *AccountsRepository) Remove(publicKey models.PublicKey) {
+	delete(r.store, publicKey)
 }

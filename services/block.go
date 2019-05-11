@@ -3,10 +3,12 @@ package services
 import (
 	"errors"
 	"sort"
+	"time"
 
 	"bitbucket.org/axelsheva/blockchain/models"
 	"bitbucket.org/axelsheva/blockchain/repositories"
 	"bitbucket.org/axelsheva/blockchain/utils"
+	"github.com/jamesruan/sodium"
 )
 
 var (
@@ -20,6 +22,7 @@ func init() {
 type IBlockService interface {
 	SetLastBlock(block *models.Block)
 	GetLastBlock() *models.Block
+	Generate(keyPair *sodium.SignKP, timestamp time.Time) (*models.Block, error)
 	ApplyGenesisBlock(block *models.Block) error
 	Process(block *models.Block) error
 }
@@ -68,4 +71,10 @@ func (s *BlockService) Process(block *models.Block) error {
 	repositories.Blocks.Push(block)
 
 	return nil
+}
+
+func (s *BlockService) Generate(keyPair *sodium.SignKP, timestamp time.Time) (*models.Block, error) {
+	block := models.Block{}
+
+	return &block, s.Process(&block)
 }

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"bitbucket.org/axelsheva/blockchain/models"
+	"bitbucket.org/axelsheva/blockchain/models/types"
 	"bitbucket.org/axelsheva/blockchain/utils"
 )
 
 func TestSendAssetUnmarshal(t *testing.T) {
 	bytes := []byte(`{"recipientPublicKey":"1","amount":2}`)
-	asset, err := utils.UnmarshalAsset(bytes, models.SendType)
+	asset, err := utils.UnmarshalAsset(bytes, types.SendType)
 	if err != nil {
 		t.Error(err)
 	}

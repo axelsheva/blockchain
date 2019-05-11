@@ -3,17 +3,9 @@ package models
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
-)
 
-type TransactionType uint8
-
-const (
-	ReferralType  TransactionType = 0
-	SendType                      = 10
-	SignatureType                 = 20
-	DelegateType                  = 30
+	"bitbucket.org/axelsheva/blockchain/models/types"
 )
 
 const SALT_LENGTH = 32
@@ -30,15 +22,10 @@ type IApplier interface {
 type IAsset interface {
 	IVerifier
 	IApplier
+	json.Unmarshaler
 	GetAmount() int64
 	CalculateFee() int64
 }
-
-// func (asset IAsset) UnmarshalJSON(data []byte) error {
-// 	println("[asset][UnmarshalJSON]")
-
-// 	return nil
-// }
 
 type ITransaction interface {
 	IVerifier
@@ -46,16 +33,16 @@ type ITransaction interface {
 }
 
 type Transaction struct {
-	ID              string          `json:"id"`
-	BlockID         string          `json:"blockId"`
-	Type            TransactionType `json:"type"`
-	SenderPublicKey PublicKey       `json:"senderPublicKey"`
-	Fee             int64          `json:"fee"`
-	Signature       string          `json:"signature"`
-	SecondSignature string          `json:"secondSignature"`
-	CreatedAt       time.Time       `json:"createdAt"`
-	Salt            string          `json:"salt"`
-	Asset           IAsset          `json:"asset"`
+	ID              string            `json:"id"`
+	BlockID         string            `json:"blockId"`
+	Type            types.Transaction `json:"type"`
+	SenderPublicKey PublicKey         `json:"senderPublicKey"`
+	Fee             int64             `json:"fee"`
+	Signature       string            `json:"signature"`
+	SecondSignature string            `json:"secondSignature"`
+	CreatedAt       time.Time         `json:"createdAt"`
+	Salt            string            `json:"salt"`
+	Asset           IAsset            `json:"asset"`
 }
 
 func (transaction *Transaction) VerifyUnconfirmed(sender *Account) error {
@@ -78,18 +65,24 @@ func (transaction *Transaction) UndoUnconfirmed(sender *Account) {
 	transaction.Asset.UndoUnconfirmed(sender)
 }
 
-func (transaction *Transaction) UnmarshalJSON(data []byte) error {
-	json.Unmarshal(data, *transaction)
+// func (transaction *Transaction) UnmarshalJSON(data []byte) error {
+// 	var tmp struct {
+// 		Type types.Transaction `json:"type"`
+// 	}
 
-	// var s string
-	// err := json.Unmarshal(data, s)
-	// if err != nil {
-	// 	return err
-	// }
-	fmt.Printf("s: %+v\n\n", transaction)
+// 	err := json.Unmarshal(data, &tmp)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	// utils.UnmarshalAsset(data)
+// 	var asset IAsset
+// 	switch tmp.Type {
+// 	case types.SendType:
+// 		asset = &SendAsset{}
+// 	}
 
-	// return json.Unmarshal(data, transaction.Asset)
-	return nil
-}
+// 	transaction.Asset = asset
+
+// 	return json.Unmarshal(data, transaction)
+// 	// return nil
+// }

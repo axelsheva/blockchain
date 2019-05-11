@@ -29,3 +29,9 @@ func (a BlockSort) Less(i, j int) bool {
 	}
 	return false
 }
+
+type ByVotes []*models.Account
+
+func (a ByVotes) Len() int           { return len(a) }
+func (a ByVotes) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByVotes) Less(i, j int) bool { return a[i].Delegate.Votes < a[j].Delegate.Votes }

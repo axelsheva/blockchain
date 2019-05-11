@@ -5,6 +5,7 @@ import (
 
 	"bitbucket.org/axelsheva/blockchain/models"
 	"bitbucket.org/axelsheva/blockchain/models/assets"
+	"bitbucket.org/axelsheva/blockchain/models/types"
 )
 
 // GenesisBlock for developmet
@@ -26,7 +27,7 @@ func init() {
 			{
 				ID:              "c7d80bf1bb220e62735bd388549a87c0cd93b8be30a1ae2f7291ce20d2a94b79",
 				BlockID:         "cbb9449abb9672d33fa2eb200b1c8b03db7c6572dfb6e59dc334c0ab82b63ab0",
-				Type:            models.SendType,
+				Type:            types.SendType,
 				CreatedAt:       timestamp,
 				SenderPublicKey: "49a2b5e68f851a11058748269a276b0c0d36497215548fb40d4fe4e929d0283a",
 				Salt:            "a7fdae234eeb416e31f5f02571f54a0c",
@@ -38,7 +39,7 @@ func init() {
 			{
 				ID:              "06b79b6bef1234318893708898e7b61ada5671d171b2d8a0737492071fce3574",
 				BlockID:         "cbb9449abb9672d33fa2eb200b1c8b03db7c6572dfb6e59dc334c0ab82b63ab0",
-				Type:            models.DelegateType,
+				Type:            types.DelegateType,
 				CreatedAt:       timestamp,
 				SenderPublicKey: "4fa2e2b4c584f1b914d06e49d3c0d0ff5298fad181f8376ae121ad88f5b8f238",
 				Salt:            "c41398ec44dbdec4ccb16d372e79aa0a",
@@ -49,7 +50,7 @@ func init() {
 			{
 				ID:              "4e87f1527c193a55c0661e2d91b58d1167bedf9211da6a765081319333c30b3c",
 				BlockID:         "cbb9449abb9672d33fa2eb200b1c8b03db7c6572dfb6e59dc334c0ab82b63ab0",
-				Type:            models.DelegateType,
+				Type:            types.DelegateType,
 				CreatedAt:       timestamp,
 				SenderPublicKey: "053097685206f4a87a69d8259846012aac3931d9d11b3a06406ecb631e83b376",
 				Salt:            "b8943007c493fed26a60f68128378cf9",
@@ -60,7 +61,7 @@ func init() {
 			{
 				ID:              "a543f11a6af530944e447f191a9e424050981c72a0194f985f4b61118820df4d",
 				BlockID:         "cbb9449abb9672d33fa2eb200b1c8b03db7c6572dfb6e59dc334c0ab82b63ab0",
-				Type:            models.DelegateType,
+				Type:            types.DelegateType,
 				CreatedAt:       timestamp,
 				SenderPublicKey: "b7856d4652565e3d32fbb4938f830200f67f9edddd329adaab67cb0a47b896e9",
 				Salt:            "e014fa1c15814d7f2a590193063f631b",
