@@ -17,7 +17,6 @@ services:
     ports:
       - "8080:8080"
     restart: always
-    command: bash -c "go get ./... && bee run"
 
 networks:
   blockchain-testnet:
