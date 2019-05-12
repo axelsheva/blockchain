@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type PeerState uint8
 
 const (
@@ -14,9 +16,8 @@ type Peer struct {
 	State         PeerState
 	OS            string
 	Version       string
-	Clock         uint64
+	Clock         time.Time
 	Broadhash     string
 	Height        uint64
-	Socket        string
 	LastBlocksIds []string
 }

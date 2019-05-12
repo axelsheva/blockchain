@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.blockchain.system";
+option java_outer_classname = "Blockchain.System.Proto";
+
+package rpc;
+
+service SystemInfo {
+    rpc GetSystemInfo(SystemInfoRequest) returns (SystemInfoReply) {}
+}
+
+message SystemInfoRequest {
+}
+
+message SystemInfoReply {
+  string IP = 1;
+  int32 port = 2;
+  uint64 heigth = 3;
+  string OS = 4;
+  string version = 5;
+  string clock = 6;
+}
