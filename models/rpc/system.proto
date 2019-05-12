@@ -20,4 +20,5 @@ message SystemInfoReply {
   string OS = 4;
   string version = 5;
   string clock = 6;
+  string broadhash = 7;
 }

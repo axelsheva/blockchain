@@ -1,3 +1,5 @@
 package models
 
-type Slot = int64
+type Slot = uint64
+
+type Slots = map[PublicKey]Slot

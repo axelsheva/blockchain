@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"time"
 
+	"bitbucket.org/axelsheva/blockchain/repositories"
+
 	"bitbucket.org/axelsheva/blockchain/configs"
 	"bitbucket.org/axelsheva/blockchain/models/rpc"
 	"google.golang.org/grpc"
@@ -16,13 +18,17 @@ type RPCServer struct{}
 
 func (s *RPCServer) GetSystemInfo(ctx context.Context, in *rpc.SystemInfoRequest) (*rpc.SystemInfoReply, error) {
 	log.Printf("[RPC][Server] GetSystemInfo")
+
+	lastBlock := repositories.Blocks.GetLast()
+
 	return &rpc.SystemInfoReply{
-		IP:      configs.Core.PublicHost,
-		Port:    configs.Core.RPCPort,
-		Heigth:  1,
-		OS:      runtime.GOOS,
-		Version: configs.Core.Version,
-		Clock:   time.Now().Format(time.RFC3339),
+		IP:        configs.Core.PublicHost,
+		Port:      configs.Core.RPCPort,
+		Heigth:    lastBlock.Height,
+		OS:        runtime.GOOS,
+		Version:   configs.Core.Version,
+		Clock:     time.Now().Format(time.RFC3339),
+		Broadhash: lastBlock.ID,
 	}, nil
 }
 

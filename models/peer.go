@@ -12,7 +12,7 @@ const (
 
 type Peer struct {
 	IP            string
-	Port          uint16
+	Port          int32
 	State         PeerState
 	OS            string
 	Version       string

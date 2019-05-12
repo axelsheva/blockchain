@@ -8,7 +8,7 @@ type Block struct {
 	PayloadHash        string         `json:"payloadHash"`
 	Signature          string         `json:"signature"`
 	GeneratorPublicKey PublicKey      `json:"generatorPublicKey"`
-	Height             int64          `json:"height"`
+	Height             uint64         `json:"height"`
 	Amount             int64          `json:"amount"`
 	Fee                int64          `json:"fee"`
 	Transactions       []*Transaction `json:"transactions"`

@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"log"
+
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
@@ -22,6 +24,8 @@ func init() {
 }
 
 func (r *PeerRepository) Add(peer *models.Peer) {
+	log.Printf("[Repository][Peer][Add] Added peer: %s, heigth: %d, broadhash: %s", peer.IP, peer.Height, peer.Broadhash)
+
 	r.peers[peer.IP] = peer
 }
 

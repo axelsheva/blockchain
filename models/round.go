@@ -1,8 +1,8 @@
 package models
 
 type HashList struct {
-	hash               string
-	generatorPublicKey string
+	Hash      string
+	PublicKey PublicKey
 }
 
 type Round struct {

@@ -9,7 +9,7 @@ import (
 
 var Core models.CoreConfig
 
-func init() {
+func Init() {
 	RPCPort, err := strconv.ParseInt(os.Getenv("RPC_PORT"), 10, 32)
 	if err != nil {
 		panic("Missing or invalid 'RPC_PORT' environment")

@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	configs.Init()
+
 	err := services.Block.ApplyGenesisBlock(&development.GenesisBlock)
 	if err != nil {
 		panic(err)

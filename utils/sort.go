@@ -35,3 +35,9 @@ type ByVotes []*models.Account
 func (a ByVotes) Len() int           { return len(a) }
 func (a ByVotes) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByVotes) Less(i, j int) bool { return a[i].Delegate.Votes < a[j].Delegate.Votes }
+
+type HashSort []*models.HashList
+
+func (a HashSort) Len() int           { return len(a) }
+func (a HashSort) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a HashSort) Less(i, j int) bool { return a[i].Hash < a[j].Hash }
