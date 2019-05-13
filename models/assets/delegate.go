@@ -1,6 +1,7 @@
 package assets
 
 import (
+	"bitbucket.org/axelsheva/blockchain/repositories"
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
@@ -23,8 +24,12 @@ func (asset *Delegate) ApplyUnconfirmed(sender *models.Account) {
 	}
 
 	sender.Delegate = &delegate
+
+	repositories.Delegates.Add(sender)
 }
 
 func (asset *Delegate) UndoUnconfirmed(sender *models.Account) {
+	repositories.Delegates.Remove(sender.PublicKey)
+
 	sender.Delegate = nil
 }

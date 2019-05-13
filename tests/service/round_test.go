@@ -71,3 +71,8 @@ func TestGenerateSlots(t *testing.T) {
 		t.Errorf("Invalid hash list. Expected: %+v, actual: %+v", expectedSlots, slots)
 	}
 }
+
+func TestGenerateRound(t *testing.T) {
+	// t := time.Parse()
+
+}

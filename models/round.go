@@ -6,8 +6,15 @@ type HashList struct {
 }
 
 type Round struct {
-	ID          uint64
-	Slots       map[PublicKey]Slot
-	StartHeight uint64
-	EndHeight   uint64
+	Slots Slots
+}
+
+func (round *Round) GetLastSlot() Slot {
+	maxSlot := int64(0)
+	for _, slot := range round.Slots {
+		if slot > maxSlot {
+			maxSlot = slot
+		}
+	}
+	return maxSlot
 }

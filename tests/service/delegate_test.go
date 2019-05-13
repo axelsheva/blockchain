@@ -9,6 +9,9 @@ import (
 )
 
 func TestGetActive(t *testing.T) {
+	activeDelegatesCount := uint16(3)
+	services.InitDelegate("", activeDelegatesCount)
+
 	delegates := []*models.Account{
 		{
 			PublicKey: "1",
@@ -42,9 +45,8 @@ func TestGetActive(t *testing.T) {
 
 	active := services.Delegate.GetActive()
 
-	expectedLen := 3
 	actualLen := len(active)
-	if actualLen != expectedLen {
-		t.Errorf("Incorrect active delegates count. Expected %d, actual %d", expectedLen, actualLen)
+	if actualLen != int(activeDelegatesCount) {
+		t.Errorf("Incorrect active delegates count. Expected %d, actual %d", activeDelegatesCount, actualLen)
 	}
 }

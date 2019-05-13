@@ -4,28 +4,29 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io"
+	"log"
 	"sort"
 	"time"
 
-	"bitbucket.org/axelsheva/blockchain/utils"
-
 	"bitbucket.org/axelsheva/blockchain/models"
+	"bitbucket.org/axelsheva/blockchain/repositories"
+	"bitbucket.org/axelsheva/blockchain/utils"
 )
 
 var (
 	Round IRountService
 )
 
-func init() {
+func InitRound(slotInterval uint8, activeDelegatesCount uint16) {
 	Round = &RoundService{
-		slotInterval:         10,
-		activeDelegatesCount: 3,
+		slotInterval:         slotInterval,
+		activeDelegatesCount: activeDelegatesCount,
 	}
 }
 
 type IRountService interface {
 	GenerateHashList(blockID string, delegates []*models.Account) []*models.HashList
-	GenerateSlots(blockID string, delegates []*models.Account, firstSlot uint64) *models.Slots
+	GenerateSlots(blockID string, delegates []*models.Account, firstSlot int64) *models.Slots
 	Generate(t time.Time)
 	GetMySlot() models.Slot
 }
@@ -35,7 +36,7 @@ type RoundService struct {
 	activeDelegatesCount uint16
 }
 
-func (r *RoundService) GenerateSlots(blockID string, delegates []*models.Account, firstSlot uint64) *models.Slots {
+func (r *RoundService) GenerateSlots(blockID string, delegates []*models.Account, firstSlot int64) *models.Slots {
 	hashList := r.GenerateHashList(blockID, delegates)
 	sort.Sort(utils.HashSort(hashList))
 
@@ -65,11 +66,31 @@ func (r *RoundService) GenerateHashList(blockID string, delegates []*models.Acco
 }
 
 func (r *RoundService) Generate(t time.Time) {
-	// lastBlock := repositories.Blocks.GetLast()
-	// delegates := Delegate.GetActive()
-	// firstSlot := utils.CaltulateFirstSlot(t, r.slotInterval, r.activeDelegatesCount)
+	lastBlock := repositories.Blocks.GetLast()
+	delegates := Delegate.GetActive()
+	firstSlot := utils.CalculateFirstSlot(t, r.slotInterval, r.activeDelegatesCount)
 
-	// r.generateSlots(lastBlock.ID, delegates, firstSlot)
+	round := models.Round{
+		Slots: *r.GenerateSlots(lastBlock.ID, delegates, firstSlot),
+	}
+	repositories.Rounds.Push(&round)
+
+	Delegate.Forge(&round)
+
+	lastSlot := round.GetLastSlot()
+	finishTime := time.Unix((lastSlot+1)*int64(r.slotInterval), 0)
+	diff := finishTime.Sub(time.Now()).Nanoseconds() / int64(time.Millisecond)
+
+	log.Printf("[Service][Round][Generate] Round will be finish after %d ms", diff)
+	duration := time.Duration(diff * int64(time.Millisecond))
+
+	// TODO: Change to queue
+	go r.Finish(duration)
+}
+
+func (r *RoundService) Finish(d time.Duration) {
+	time.Sleep(d)
+	r.Generate(time.Now())
 }
 
 func (r *RoundService) GetMySlot() models.Slot {

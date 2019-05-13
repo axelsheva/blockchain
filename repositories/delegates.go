@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"log"
+
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
@@ -25,10 +27,14 @@ type DelegatesRepository struct {
 }
 
 func (r *DelegatesRepository) Add(account *models.Account) {
+	log.Printf("[Repository][Delegates][Add] %s", account.Delegate.Username)
+
 	r.store[account.PublicKey] = account
 }
 
 func (r *DelegatesRepository) Remove(publicKey models.PublicKey) {
+	log.Printf("[Repository][Delegates][Remove] %s", r.store[publicKey].Delegate.Username)
+
 	delete(r.store, publicKey)
 }
 
