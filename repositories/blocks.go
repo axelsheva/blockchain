@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"log"
+
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
@@ -27,6 +29,8 @@ type BlocksRepository struct {
 }
 
 func (r *BlocksRepository) Push(block *models.Block) *models.Block {
+	log.Printf("[Repository][Block][Push] Block ID: %s", block.ID)
+
 	r.blocks = append(r.blocks, block)
 	r.indexes[block.ID] = block
 

@@ -17,13 +17,13 @@ var (
 	Delegate IDelegateService
 )
 
-func InitDelegate(forgeSecret string, activeCount uint16) {
+func NewDelegate(forgeSecret string, activeCount uint16) IDelegateService {
 	keyPair := utils.GenerateKeyPair(forgeSecret)
 	publicKey := hex.EncodeToString(keyPair.PublicKey.Bytes)
 
-	log.Printf("[Service][Delegate][Init] public key: %s", publicKey)
+	log.Printf("[Service][Delegate][NewDelegate] public key: %s", publicKey)
 
-	Delegate = &DelegateService{
+	return &DelegateService{
 		keyPair:     keyPair,
 		publicKey:   models.PublicKey(publicKey),
 		activeCount: activeCount,
@@ -45,12 +45,18 @@ type DelegateService struct {
 func (s *DelegateService) Forge(round *models.Round) {
 	if slot, ok := round.Slots[s.publicKey]; ok {
 		forgeTime := time.Unix(slot*int64(configs.Const.SlotInterval), 0)
-		diff := forgeTime.Sub(time.Now()).Nanoseconds() / int64(time.Millisecond)
+		diff := forgeTime.Sub(time.Now())
 
-		if (diff + 1000) > 0 {
-			log.Printf("[Service][Delegate][Forge] Delegate will be forge in slot %d, after %d ms", slot, diff)
+		if (diff.Seconds() + 1) > 0 {
+			log.Printf("[Service][Delegate][Forge] Delegate will be forge in slot %d, after %s", slot, diff.String())
+
+			go func() {
+				time.Sleep(diff)
+
+				Block.Generate(s.keyPair, forgeTime)
+			}()
 		} else {
-			log.Printf("[Service][Delegate][Forge] Skip slot: %d, time: %d ms", slot, diff)
+			log.Printf("[Service][Delegate][Forge] Skip slot: %d, time: %s", slot, diff.String())
 		}
 	}
 

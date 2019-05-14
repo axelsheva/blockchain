@@ -17,8 +17,10 @@ var (
 	Round IRountService
 )
 
-func InitRound(slotInterval uint8, activeDelegatesCount uint16) {
-	Round = &RoundService{
+func NewRound(slotInterval uint8, activeDelegatesCount uint16) IRountService {
+	log.Printf("[Service][Round][NewRound] Slot interval: %ds, active delegates count: %d", slotInterval, activeDelegatesCount)
+
+	return &RoundService{
 		slotInterval:         slotInterval,
 		activeDelegatesCount: activeDelegatesCount,
 	}
@@ -65,7 +67,16 @@ func (r *RoundService) GenerateHashList(blockID string, delegates []*models.Acco
 	return hashList
 }
 
+func (r *RoundService) Finish(d time.Duration) {
+	time.Sleep(d)
+
+	PriorityWorkQueue.Push(func() {
+		r.Generate(time.Now())
+	})
+}
+
 func (r *RoundService) Generate(t time.Time) {
+	log.Printf("[Service][Round][Generate] Generate new round for time: %s", t.Format(time.RFC3339))
 	lastBlock := repositories.Blocks.GetLast()
 	delegates := Delegate.GetActive()
 	firstSlot := utils.CalculateFirstSlot(t, r.slotInterval, r.activeDelegatesCount)
@@ -78,19 +89,16 @@ func (r *RoundService) Generate(t time.Time) {
 	Delegate.Forge(&round)
 
 	lastSlot := round.GetLastSlot()
-	finishTime := time.Unix((lastSlot+1)*int64(r.slotInterval), 0)
+
+	// TODO: check without throttling
+	throttling := int64(100000000)
+	finishTime := time.Unix((lastSlot+1)*int64(r.slotInterval), throttling)
 	diff := finishTime.Sub(time.Now()).Nanoseconds() / int64(time.Millisecond)
 
-	log.Printf("[Service][Round][Generate] Round will be finish after %d ms", diff)
 	duration := time.Duration(diff * int64(time.Millisecond))
+	log.Printf("[Service][Round][Generate] Round will be finish after %s", duration.String())
 
-	// TODO: Change to queue
 	go r.Finish(duration)
-}
-
-func (r *RoundService) Finish(d time.Duration) {
-	time.Sleep(d)
-	r.Generate(time.Now())
 }
 
 func (r *RoundService) GetMySlot() models.Slot {

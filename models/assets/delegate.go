@@ -1,8 +1,8 @@
 package assets
 
 import (
-	"bitbucket.org/axelsheva/blockchain/repositories"
 	"bitbucket.org/axelsheva/blockchain/models"
+	"bitbucket.org/axelsheva/blockchain/repositories"
 )
 
 type Delegate struct {

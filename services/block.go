@@ -2,7 +2,9 @@ package services
 
 import (
 	"errors"
+	"log"
 	"sort"
+	"strings"
 	"time"
 
 	"bitbucket.org/axelsheva/blockchain/models"
@@ -74,7 +76,12 @@ func (s *BlockService) Process(block *models.Block) error {
 }
 
 func (s *BlockService) Generate(keyPair *sodium.SignKP, timestamp time.Time) (*models.Block, error) {
-	block := models.Block{}
+	log.Printf("[Service][Block][Generate] Timestamp: %s", timestamp.Format(time.RFC3339))
+
+	block := models.Block{
+		ID:           strings.ToUpper(utils.RandStringBytesMask(64)),
+		Transactions: []*models.Transaction{},
+	}
 
 	return &block, s.Process(&block)
 }

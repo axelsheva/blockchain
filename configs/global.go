@@ -8,10 +8,10 @@ import (
 	"bitbucket.org/axelsheva/blockchain/models"
 )
 
-var Core models.CoreConfig
+var Core *models.CoreConfig
 var Const models.Const
 
-func Init() {
+func Init() (*models.CoreConfig, models.Const) {
 	RPCPort, err := strconv.ParseInt(os.Getenv("RPC_PORT"), 10, 32)
 	if err != nil {
 		panic("Missing or invalid 'RPC_PORT' environment")
@@ -25,11 +25,13 @@ func Init() {
 		panic("Missing 'FORGE_SECRET' environment")
 	}
 
-	Core = models.CoreConfig{
+	coreConfig := models.CoreConfig{
 		RPCPort:     int32(RPCPort),
 		PublicHost:  publicHost,
 		Version:     "0.0.1",
 		ForgeSecret: forgeSecret,
 	}
-	Const = development.Const
+	constConfig := development.Const
+
+	return &coreConfig, constConfig
 }
