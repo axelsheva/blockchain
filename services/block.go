@@ -4,7 +4,6 @@ import (
 	"errors"
 	"log"
 	"sort"
-	"strings"
 	"time"
 
 	"bitbucket.org/axelsheva/blockchain/models"
@@ -79,7 +78,7 @@ func (s *BlockService) Generate(keyPair *sodium.SignKP, timestamp time.Time) (*m
 	log.Printf("[Service][Block][Generate] Timestamp: %s", timestamp.Format(time.RFC3339))
 
 	block := models.Block{
-		ID:           strings.ToUpper(utils.RandStringBytesMask(64)),
+		ID:           utils.RandID(),
 		Transactions: []*models.Transaction{},
 	}
 
